@@ -43,7 +43,7 @@ Three layers, in order of dependency:
   - `Graphics` (`graphics.py`) is an ABC declaring `start_scene`, `event_handler`, `draw_object`, `draw_scene`, plus an event-callback registry (`set_event`/`events`) that games use to hook `end`, `key_press`, `key_up`, and `objects` (a callback the graphics layer calls to get the current object list to draw).
   - `PygameGraphics` is the working backend: maps arrow keys/space/escape to `key_press`/`key_up` events, draws rectangles per-object using per-archetype width/height.
   - `WebGraphics` is a stub — every method is a no-op placeholder.
-  - `Graphics.load_archetypes()` hardcodes the path `./tetris/objects/archetypes.json`. This means the graphics layer is not actually game-agnostic yet — it directly references the `tetris` game's data file. Any new game (or the `web` backend) currently depends on that path existing, or on this method being generalized (e.g. taking a path/game parameter) first.
+  - `Graphics.load_archetypes(archetypes_path)` takes the archetypes file path as an argument rather than hardcoding one. `Game` exposes `self.archetypes_path` (default `None`) and passes it to `graphics.start_scene(archetypes_path)` in `scene_start()`; each concrete game sets its own `self.archetypes_path` (see `Tetris.__init__`). This keeps the graphics layer game-agnostic — a new game just needs to set its own path.
 
 - **`tetris/` — the one concrete game currently built on the engine.**
   - `Tetris(Game)` implements Tetris' rules: gravity/movement (`move_objects`), AABB collision against nearby non-active objects (`get_crashable_pieces`, `collision_detection`), line clearing (`check_line`), and spawns a new `Piece` after each collision (`on_collide` → `create_piece`).

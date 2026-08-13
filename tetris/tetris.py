@@ -9,6 +9,7 @@ class Tetris(Game):
         self.size = 20
         self.score = 0
         super().__init__(graphics=graphics)
+        self.archetypes_path = './tetris/objects/archetypes.json'
         self.stage = {"base-speed": 0.008}
 
     def load_objects(self):

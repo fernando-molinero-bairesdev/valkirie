@@ -9,15 +9,15 @@ class Graphics(ABC):
         self.events = {}
         self.archetypes = {}
 
-    def load_archetypes(self):
-        with open('./tetris/objects/archetypes.json') as f:
+    def load_archetypes(self, archetypes_path):
+        with open(archetypes_path) as f:
             self.archetypes = json.load(f)
-    
+
     def set_event(self, event, function):
         self.events[event] = function
 
     @abstractmethod
-    def start_scene(self):
+    def start_scene(self, archetypes_path):
         """Initialize the graphics scene"""
         pass
 
