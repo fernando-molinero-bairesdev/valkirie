@@ -8,10 +8,9 @@ class PygameGraphics(Graphics):
         pygame.init()
         self.screen = None
 
-    def start_scene(self, archetypes_path):
+    def start_scene(self):
         self.active = True
         size = self.width, self.height
-        self.load_archetypes(archetypes_path)
         self.screen = pygame.display.set_mode(size)
 
     def event_handler(self):

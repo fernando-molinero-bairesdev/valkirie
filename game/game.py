@@ -15,9 +15,11 @@ class Game():
         self.times = []
         self.active_objects = []
         self.objects = []
-        self.archetypes_path = None
+        self.archetypes = {}
         self.setup_events()
         self.load_objects()
+        self.load_archetypes()
+        self.graphics.set_archetypes(self.archetypes)
         self.load_actions()
         self.start = time()
 
@@ -45,6 +47,9 @@ class Game():
     def load_objects(self):
         raise NotImplementedError
 
+    def load_archetypes(self):
+        raise NotImplementedError
+
     def keys_pressed(self, key):
         raise NotImplementedError
 
@@ -70,7 +75,7 @@ class Game():
             self.graphics.draw_scene()
 
     def scene_start(self):
-        self.graphics.start_scene(self.archetypes_path)
+        self.graphics.start_scene()
 
     def end_game(self):
         self.active = False

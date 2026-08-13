@@ -1,4 +1,3 @@
-import json
 from abc import ABC, abstractmethod
 
 class Graphics(ABC):
@@ -9,15 +8,14 @@ class Graphics(ABC):
         self.events = {}
         self.archetypes = {}
 
-    def load_archetypes(self, archetypes_path):
-        with open(archetypes_path) as f:
-            self.archetypes = json.load(f)
+    def set_archetypes(self, archetypes):
+        self.archetypes = archetypes
 
     def set_event(self, event, function):
         self.events[event] = function
 
     @abstractmethod
-    def start_scene(self, archetypes_path):
+    def start_scene(self):
         """Initialize the graphics scene"""
         pass
 
