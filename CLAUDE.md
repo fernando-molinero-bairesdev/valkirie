@@ -4,7 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Valkirie is a Python base game engine. The goal is a reusable engine (`game/`, `graphics/`) with individual games (currently `tetris/`) built on top of it.
+Valkirie started as a Python/pygame base game engine (`game/`, `graphics/`, `tetris/` — see below, still present and functional). The project is now pivoting to a Unity/C# engine at [`unity/`](unity/README.md), aimed at three planned games: Valkirie (2D platformer), a multiplayer co-op superhero-emergency game, and a physics-driven deformable-blob game. The Python code is not being actively extended for that goal; treat it as the original prototype, not the current target architecture.
+
+### Unity architecture summary (see `unity/README.md` for the full breakdown)
+
+- **Layering:** `Core` (engine-agnostic: motors, powers, objectives/incidents, events) → per-motor implementations (`PlatformerMotor2D`, `AerialMotor2D`, a not-yet-built `SoftBodyMotor` for the blob game) → per-game content (`Games/Valkirie`, `Games/Superhero`, `Games/Blob` — currently empty placeholders).
+- **Composition over inheritance, applied consistently:** `PowerDefinition` (character abilities), `ObjectiveDefinition`/`IncidentDefinition` (level/emergency goals) all follow the same pattern — a ScriptableObject definition holding a list of small, reusable, composable effect/condition/action ScriptableObjects. New content is usually a new asset, not new code.
+- **`IMotor`** is the interface all movement goes through (`Vector3`/`Quaternion`, not `Vector2`, specifically so a future 3D game can reuse the same ability/objective code). `MotorSwitcher` lets one character own several motors and hand off between them (e.g. a flying hero landing).
+- **`IncidentDefinition : ObjectiveSet`** adds severity, a player-count difficulty curve, and `IncidentTrigger`s (condition → actions) that unify spawn tables and escalation into one mechanism, for the superhero game's concurrent, reactive emergencies. Spawn zones are referenced by string id (`[ZoneId]`-drawn dropdown backed by `ZoneIdRegistry`), not direct scene references, so incidents stay portable across maps.
+- Real gaps, not yet designed/built: no object pooling, no actual Netcode for GameObjects wiring (`IncidentInstance` must run server-authoritative only once that's added), no `SoftBodyMotor`, no input-to-motor glue layer.
+
+No Unity project files (`ProjectSettings/`, `Library/`) exist yet — `unity/README.md` has setup steps.
+
+---
+
+## Python prototype (legacy, not actively developed)
+
+The goal was a reusable engine (`game/`, `graphics/`) with individual games (currently `tetris/`) built on top of it.
 
 ## Commands
 
